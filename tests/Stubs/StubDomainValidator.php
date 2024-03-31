@@ -8,7 +8,7 @@ class StubDomainValidator implements DomainValidator
 {
     private bool $valid = true;
 
-    public function validate(string $domain): bool
+    public function validate(string $url): bool
     {
         return $this->valid;
     }

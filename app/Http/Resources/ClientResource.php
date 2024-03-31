@@ -19,8 +19,20 @@ class ClientResource extends JsonResource
             'id' => $this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'email' => $this->email,
-            'website' => $this->website,
+            'websites' => $this->when(
+                $this->resource->relationLoaded('websites'),
+                $this->websites->pluck('website'),
+                []
+            ),
+            'emails' => $this->when(
+                $this->resource->relationLoaded('emails'),
+                $this->emails->pluck('email'),
+                []
+            ),
+            'email' => $this->when(
+                $this->resource->relationLoaded('emails'),
+                $this->emails->where('is_main', 1)->first()->email
+            ),
             'country_id' => $this->country_id,
             'country' => CountryResource::make($this->whenLoaded('country')),
             'created_at' => $this->created_at,

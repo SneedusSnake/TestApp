@@ -65,14 +65,66 @@ class ClientTest extends TestCase
             'first_name' => fake()->firstName,
             'last_name'  => fake()->lastName,
             'country_id' => Country::query()->first()->id,
-            'email'      => fake()->email,
-            'website'    => fake()->url,
+            'email'      => fake()->unique()->email,
+            'websites'    => [fake()->unique()->url, fake()->unique()->url],
         ];
 
         $response = $this->json('POST', '/api/clients', $data);
 
-        $this->assertDatabaseHas('clients', $data);
+        $this->assertDatabaseHas('clients', [
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'country_id' => $data['country_id'],
+        ]);
         $response->assertStatus(200)->assertJsonFragment($data);
+    }
+
+    public function test_clients_resource_creates_client_emails(): void
+    {
+        $data = [
+            'first_name' => fake()->firstName,
+            'last_name'  => fake()->lastName,
+            'country_id' => Country::query()->first()->id,
+            'email'      => 'testMainEmail@gmail.com',
+            'emails'     => ['testAdditionalEmail1@gmail.com', 'testAdditionalEmail2@gmail.com'],
+            'websites'   => [fake()->unique()->url, fake()->unique()->url],
+        ];
+
+        $this->json('POST', '/api/clients', $data);
+
+        $this->assertDatabaseHas('client_emails', [
+            'email' => $data['email'],
+            'is_main' => 1,
+        ]);
+        $this->assertDatabaseHas('client_emails', [
+            'email' => $data['emails'][0],
+            'is_main' => 0,
+        ]);
+        $this->assertDatabaseHas('client_emails', [
+            'email' => $data['emails'][1],
+            'is_main' => 0,
+        ]);
+    }
+
+
+    public function test_clients_resource_creates_client_websites(): void
+    {
+        $data = [
+            'first_name' => fake()->firstName,
+            'last_name'  => fake()->lastName,
+            'country_id' => Country::query()->first()->id,
+            'email'      => fake()->unique()->email,
+            'websites'    => ['http://website1.com', 'http://website2.com'],
+        ];
+
+        $this->json('POST', '/api/clients', $data);
+
+        $this->assertDatabaseHas('client_websites', [
+            'website' => $data['websites'][0]
+        ]);
+        $this->assertDatabaseHas('client_websites', [
+            'website' => $data['websites'][1]
+        ]);
     }
 
     public function test_clients_resource_required_fields_validation(): void
@@ -85,23 +137,24 @@ class ClientTest extends TestCase
                 'last_name',
                 'country_id',
                 'email',
-                'website',
+                'websites',
             ]);
     }
 
     public function test_clients_resource_validates_unique_fields(): void
     {
-        $existingClient = Client::factory()->create([
-            'email'      => fake()->email,
-            'website'    => fake()->url,
-        ]);
+        $existingClient = Client::factory()->create();
 
-        $response = $this->json('POST', '/api/clients', $existingClient->toArray());
+        $response = $this->json('POST', '/api/clients', [
+            ...$existingClient->toArray(),
+            'email' => $existingClient->emails->first()->email,
+            'websites' => $existingClient->websites()->pluck('website'),
+        ]);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors([
                 'email',
-                'website',
+                'websites.0',
             ]);
     }
 
@@ -112,7 +165,7 @@ class ClientTest extends TestCase
             'last_name'  => fake()->lastName,
             'country_id' => 123456,
             'email'      => fake()->email,
-            'website'    => fake()->url,
+            'websites'    => [fake()->url],
         ];
 
         $response = $this->json('POST', '/api/clients', $data);
@@ -128,13 +181,13 @@ class ClientTest extends TestCase
             'last_name'  => fake()->lastName,
             'country_id' => Country::query()->first()->id,
             'email'      => fake()->email,
-            'website'    => 'not an url',
+            'websites'   => ['not an url'],
         ];
 
         $response = $this->json('POST', '/api/clients', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['website']);
+            ->assertJsonValidationErrors(['websites.0']);
     }
 
     public function test_clients_resource_validates_website_domain(): void
@@ -144,13 +197,13 @@ class ClientTest extends TestCase
             'last_name'  => fake()->lastName,
             'country_id' => Country::query()->first()->id,
             'email'      => fake()->email,
-            'website'    => 'http://thisdomaindoesnotexist.com',
+            'websites'   => ['http://thisdomaindoesnotexist.com'],
         ];
         $this->domainValidator->invalid();
 
         $response = $this->json('POST', '/api/clients', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['website']);
+            ->assertJsonValidationErrors(['websites.0']);
     }
 }

@@ -20,4 +20,14 @@ class Client extends Model
     {
         return $this->hasMany(Sale::class);
     }
+
+    public function emails(): HasMany
+    {
+        return $this->hasMany(ClientEmail::class);
+    }
+
+    public function websites(): HasMany
+    {
+        return $this->hasMany(ClientWebsite::class);
+    }
 }

@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->unsignedInteger('country_id');
-            $table->string('email')->unique();
-            $table->string('website')->unique();
             $table->timestamps();
 
             $table->foreign('country_id')->references('id')->on('countries');

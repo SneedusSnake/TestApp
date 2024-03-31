@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::query('TRUNCATE countries');
+        DB::raw('TRUNCATE countries');
     }
 };

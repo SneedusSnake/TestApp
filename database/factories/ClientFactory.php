@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Client;
+use App\Models\ClientEmail;
+use App\Models\ClientWebsite;
 use App\Models\Country;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,9 +25,15 @@ class ClientFactory extends Factory
         return [
             'first_name' => fake()->firstName,
             'last_name' => fake()->lastName,
-            'email' => fake()->unique()->email,
-            'website' => fake()->url,
             'country_id' => $countries->random()->id,
         ];
+    }
+
+    public function configure(): self
+    {
+        return $this->afterCreating(function (Client $client) {
+            ClientEmail::factory()->for($client)->create();
+            ClientWebsite::factory()->for($client)->create();
+        });
     }
 }
