@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Commands\CreateClientCommand;
+use App\Handlers\CreateClientHandler;
 use App\Http\Requests\CreateClientRequest;
-use App\Models\ClientEmail;
-use App\Models\ClientWebsite;
+use App\Http\Resources\ClientResource;
+use App\Models\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use App\Models\Client;
-use App\Http\Resources\ClientResource;
 
 class ClientController extends Controller
 {
+    public function __construct(private CreateClientHandler $clientHandler)
+    {
+
+    }
+
     public function list(): JsonResponse
     {
         return response()->json(
@@ -21,20 +26,8 @@ class ClientController extends Controller
 
     public function create(CreateClientRequest $request): JsonResponse
     {
-        $client = new Client();
-        $client->setRawAttributes(
-            $request->all(['first_name', 'last_name','country_id'])
-        );
-        $client->save();
-        $client->emails()->saveMany([
-            ...array_map(function (string $email) {
-                return new ClientEmail(['email' => $email]);
-            }, $request->get('emails', [])),
-            new ClientEmail(['email' => $request->get('email'), 'is_main' => 1])]
-        );
-        $client->websites()->saveMany(array_map(function (string $website) {
-            return new ClientWebsite(['website' => $website]);
-        }, $request->get('websites')));
+        $command = CreateClientCommand::fromArray($request->all());
+        $client = $this->clientHandler->handle($command);
         $client->loadMissing(['emails', 'websites']);
 
         return response()->json(['data' => new ClientResource($client)]);
