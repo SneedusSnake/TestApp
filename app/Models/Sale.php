@@ -10,6 +10,10 @@ class Sale extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'created_at' => 'datetime: Y-m-d H:i:s',
+    ];
+
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);

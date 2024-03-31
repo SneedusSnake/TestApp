@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Client extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'created_at' => 'datetime: Y-m-d H:i:s',
+    ];
 
     public function country(): BelongsTo
     {
