@@ -6,16 +6,27 @@ use App\Commands\CreateClientCommand;
 use App\Models\Client;
 use App\Models\ClientEmail;
 use App\Models\ClientWebsite;
+use Illuminate\Database\Connection;
 
 class CreateClientHandler
 {
+    public function __construct(private Connection $db)
+    {
+
+    }
+
     public function handle(CreateClientCommand $command): Client
     {
         return $this->createClient($command);
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function createClient(CreateClientCommand $command): Client
     {
+        $this->db->beginTransaction();
+
         $client = new Client();
         $client->first_name = $command->getFirstName();
         $client->last_name = $command->getLastName();
@@ -24,6 +35,8 @@ class CreateClientHandler
 
         $this->createClientEmails($client, $command->getEmail(), $command->getEmails());
         $this->createClientWebsites($client, $command->getWebsites());
+
+        $this->db->commit();
 
         return $client;
     }
