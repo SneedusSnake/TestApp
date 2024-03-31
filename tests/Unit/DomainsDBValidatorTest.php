@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Exceptions\DomainsDBRemoteServiceException;
 use App\Util\DomainsDBValidator;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -97,7 +98,7 @@ class DomainsDBValidatorTest extends TestCase
     {
         $this->mockErrorResponse(403);
 
-        $this->expectException(\Throwable::class);
+        $this->expectException(DomainsDBRemoteServiceException::class);
 
         $this->validator->validate('test');
     }
