@@ -6,9 +6,9 @@ use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ClientWebsite>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Sale>
  */
-class ClientWebsiteFactory extends Factory
+class SaleFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +18,8 @@ class ClientWebsiteFactory extends Factory
     public function definition(): array
     {
         return [
+            'amount' => mt_rand(1, 5000),
             'client_id' => Client::factory(),
-            'website' => $this->faker->unique()->url,
         ];
     }
 }
