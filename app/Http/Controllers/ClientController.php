@@ -18,9 +18,6 @@ class ClientController extends Controller
         );
     }
 
-    /**
-     * @throws ValidationException
-     */
     public function create(CreateClientRequest $request): JsonResponse
     {
         $client = new Client();
