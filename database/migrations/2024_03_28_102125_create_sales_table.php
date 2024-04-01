@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedInteger('amount');
             $table->foreignId('client_id')->constrained();
             $table->timestamps();
+
+            $table->index(['client_id', 'amount', 'created_at']);
         });
     }
 

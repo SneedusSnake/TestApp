@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Resources\SaleResource;
 use App\Models\Sale;
 use Illuminate\Http\Request;
@@ -24,3 +25,8 @@ Route::post('/clients/', [ClientController::class, 'create']);
 Route::get('/sales/', function (Request $request) {
    return response()->json(['data' => SaleResource::collection(Sale::query()->paginate(5))]);
 });
+
+
+Route::get('/statistics/sales', [StatisticsController::class, 'sales']);
+
+
