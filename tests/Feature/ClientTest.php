@@ -59,6 +59,21 @@ class ClientTest extends TestCase
             ->assertJson($resource->response($request)->getData(true));
     }
 
+    public function test_clients_resource_filter_by_ids(): void
+    {
+        $clients = Client::factory()->count(5)->create();
+        $request = Request::create('/api/clients', 'GET', [
+            'ids' => [$clients->first()->id, $clients->last()->id]
+        ]);
+
+        $response = $this->json($request->getMethod(), $request->getRequestUri());
+
+        $response->assertStatus(200)
+            ->assertJsonFragment(['id' => $clients->first()->id])
+            ->assertJsonFragment(['id' => $clients->last()->id])
+            ->assertJsonMissing(['id' => $clients[1]->id]);
+    }
+
     public function test_clients_resource_creates_client(): void
     {
         $data = [
@@ -120,10 +135,10 @@ class ClientTest extends TestCase
         $this->json('POST', '/api/clients', $data);
 
         $this->assertDatabaseHas('client_websites', [
-            'website' => $data['websites'][0]
+            'website' => $data['websites'][0],
         ]);
         $this->assertDatabaseHas('client_websites', [
-            'website' => $data['websites'][1]
+            'website' => $data['websites'][1],
         ]);
     }
 

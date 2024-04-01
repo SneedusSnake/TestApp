@@ -18,16 +18,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/clients/', [ClientController::class, 'list']);
+Route::prefix('clients')->group(function () {
+    Route::get('/', [ClientController::class, 'list']);
 
-Route::post('/clients/', [ClientController::class, 'create']);
+    Route::post('/', [ClientController::class, 'create']);
+});
 
 Route::get('/sales/', function (Request $request) {
    return response()->json(['data' => SaleResource::collection(Sale::query()->paginate(5))]);
 });
 
-
-Route::get('/statistics/sales', [StatisticsController::class, 'sales']);
-Route::get('/statistics/clients', [StatisticsController::class, 'clients']);
+Route::prefix('statistics')->group(function () {
+    Route::get('/sales', [StatisticsController::class, 'sales']);
+    Route::get('/clients', [StatisticsController::class, 'clients']);
+});
 
 

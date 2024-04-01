@@ -7,7 +7,9 @@ use App\Handlers\CreateClientHandler;
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class ClientController extends Controller
@@ -17,10 +19,17 @@ class ClientController extends Controller
 
     }
 
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
+        $clients = Client::query()
+            ->when($request->input('ids'), function (Builder $query) use ($request) {
+                $query->whereIn('id', $request->input('ids'));
+            })
+            ->with('emails')
+            ->paginate(config('pagination.records_per_page'));
+
         return response()->json(
-            ['data' => ClientResource::collection(Client::query()->paginate(5))],
+            ['data' => ClientResource::collection($clients)],
         );
     }
 

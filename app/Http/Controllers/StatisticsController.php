@@ -55,6 +55,8 @@ class StatisticsController extends Controller
                 $query->where('created_at', '<=', $request->input('date_to'));
             })
             ->groupBy('date')
+            ->limit(config('pagination.records_per_page'))
+            ->orderBy('date', 'desc')
             ->pluck('count', 'date');
 
         return response()->json(['data' => $clients]);
