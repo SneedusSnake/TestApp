@@ -28,5 +28,6 @@ Route::get('/sales/', function (Request $request) {
 
 
 Route::get('/statistics/sales', [StatisticsController::class, 'sales']);
+Route::get('/statistics/clients', [StatisticsController::class, 'clients']);
 
 

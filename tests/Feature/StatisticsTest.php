@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Client;
 use App\Models\Sale;
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -46,7 +45,7 @@ class StatisticsTest extends TestCase
     public function test_statistics_sales_filters_results_by_date(): void
     {
         $date = CarbonImmutable::today()->startOfDay();
-        $outdatedSale = Sale::factory()->create(['created_at' => $date->subDay()]);
+        Sale::factory()->create(['created_at' => $date->subDay()]);
         $actualSale = Sale::factory()->create(['created_at' => $date]);
 
         $response = $this->json(
@@ -63,6 +62,44 @@ class StatisticsTest extends TestCase
             'clients' => [
                 $actualSale->client_id => (string)$actualSale->amount,
             ],
+        ]);
+    }
+
+    public function test_statistics_clients_route(): void
+    {
+        $date = CarbonImmutable::today();
+        Client::factory()->count(3)->sequence(
+            ['created_at' => $date->subDay()],
+            ['created_at' => $date->subDay()],
+            ['created_at' => $date],
+        )->create();
+
+        $response = $this->json('GET', '/api/statistics/clients');
+
+        $response->assertStatus(200)->assertJsonFragment([
+            $date->subDay()->format('Y-m-d') => 2,
+            $date->format('Y-m-d') => 1,
+        ]);
+    }
+
+    public function test_statistics_clients_filters_by_date(): void
+    {
+        $date = CarbonImmutable::today();
+        Client::factory()->count(3)->sequence(
+            ['created_at' => $date->subDay()],
+            ['created_at' => $date->subDay()],
+            ['created_at' => $date],
+        )->create();
+
+        $response = $this->json('GET', '/api/statistics/clients', [
+            'date_from' => $date->startOfDay(),
+            'date_to' => $date->endOfDay(),
+        ]);
+
+        $response->assertStatus(200)->assertJsonFragment([
+            $date->format('Y-m-d') => 1,
+        ])->assertJsonMissing([
+            $date->subDay()->format('Y-m-d') => 2,
         ]);
     }
 }

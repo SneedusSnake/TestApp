@@ -43,4 +43,20 @@ class StatisticsController extends Controller
             'total' => $total,
         ]]);
     }
+
+    public function clients(Request $request): JsonResponse
+    {
+        $clients = $this->connection->table('clients')
+            ->selectRaw('COUNT(id) as count, DATE(created_at) as date')
+            ->when($request->input('date_from'), function (Builder $query) use ($request) {
+                $query->where('created_at', '>=', $request->input('date_from'));
+            })
+            ->when($request->input('date_to'), function (Builder $query) use ($request) {
+                $query->where('created_at', '<=', $request->input('date_to'));
+            })
+            ->groupBy('date')
+            ->pluck('count', 'date');
+
+        return response()->json(['data' => $clients]);
+    }
 }
