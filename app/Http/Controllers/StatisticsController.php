@@ -36,7 +36,7 @@ class StatisticsController extends Controller
             ->groupBy('client_id')
             ->orderBy('total_amount', 'DESC')
             ->limit(9)
-            ->pluck('total_amount', 'client_id');
+            ->get();
 
         return response()->json(['data' => [
             'clients' => $topSales,
@@ -57,7 +57,7 @@ class StatisticsController extends Controller
             ->groupBy('date')
             ->limit(config('pagination.records_per_page'))
             ->orderBy('date', 'desc')
-            ->pluck('count', 'date');
+            ->get();
 
         return response()->json(['data' => $clients]);
     }

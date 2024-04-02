@@ -36,8 +36,14 @@ class StatisticsTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonFragment([
                 'clients' => [
-                    $clients[0]->id => (string) $firstClientSales->sum('amount'),
-                    $clients[1]->id => (string) $secondClientSales->sum('amount'),
+                    [
+                        'client_id' => $clients[0]->id,
+                        'total_amount' => (string) $firstClientSales->sum('amount'),
+                    ],
+                    [
+                        'client_id' => $clients[1]->id,
+                        'total_amount' => (string) $secondClientSales->sum('amount'),
+                    ],
                 ],
             ]);
     }
@@ -60,7 +66,10 @@ class StatisticsTest extends TestCase
         $response->assertStatus(200)->assertJsonFragment([
             'total' => $actualSale->amount,
             'clients' => [
-                $actualSale->client_id => (string)$actualSale->amount,
+                [
+                    'client_id' => $actualSale->client_id,
+                    'total_amount' => (string)$actualSale->amount,
+                ],
             ],
         ]);
     }
@@ -77,9 +86,12 @@ class StatisticsTest extends TestCase
         $response = $this->json('GET', '/api/statistics/clients');
 
         $response->assertStatus(200)->assertJsonFragment([
-            $date->subDay()->format('Y-m-d') => 2,
-            $date->format('Y-m-d') => 1,
-        ]);
+                'date' => $date->subDay()->format('Y-m-d'),
+                'count' => 2,
+            ])->assertJsonFragment([
+                'date' => $date->format('Y-m-d'),
+                'count' => 1,
+            ]);
     }
 
     public function test_statistics_clients_filters_by_date(): void
@@ -97,9 +109,15 @@ class StatisticsTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertJsonFragment([
-            $date->format('Y-m-d') => 1,
+            [
+                'date' => $date->format('Y-m-d'),
+                'count' => 1
+            ],
         ])->assertJsonMissing([
-            $date->subDay()->format('Y-m-d') => 2,
+            [
+                'date' => $date->subDay()->format('Y-m-d'),
+                'count' => 2,
+            ]
         ]);
     }
 }

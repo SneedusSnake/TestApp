@@ -7,8 +7,8 @@ const props = defineProps(['clients', 'sales', 'rest'])
 const chart = ref(null)
 
 const labels = computed(() => [
-    ...Object.keys(props.sales).map(clientId => {
-        const client = props.clients[clientId]
+    ...props.sales.map(client_sale => {
+        const client = props.clients[client_sale.client_id]
 
         return `${client.first_name} ${client.last_name}`
     }),
@@ -29,7 +29,7 @@ onMounted(() => {
                         поэтому даже не отображаются на диаграме. В целях демонстрации здесь подставлено случайное число,
                         вместо актуальных продаж всех клиентов, хранящихся в props.rest
                      */
-                    data: [...Object.values(props.sales),  Math.random()*10000],
+                    data: [...props.sales.map(client_sales => client_sales.total_amount),  Math.random()*10000],
                 },
             ],
         }

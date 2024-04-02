@@ -7,13 +7,13 @@ import SalesChart from "./SalesChart.vue";
 const sales = ref()
 const clients = ref()
 const rest = computed(() =>
-        sales.value.total - Object.values(sales.value.clients).
-        reduce((sum, amount) => +sum + +amount, 0)
+        sales.value.total - sales.value.clients.map(client => +client.total_amount).
+        reduce((sum, amount) => sum + amount, 0)
 )
 
 onMounted(async () => {
     sales.value = await fetchSales()
-    clients.value = (await fetchClients(Object.keys(sales.value.clients))).reduce((map, client) => {
+    clients.value = (await fetchClients(sales.value.clients.map(client => client.client_id))).reduce((map, client) => {
         map[client.id] = client
         return map
     }, {})
@@ -29,9 +29,9 @@ onMounted(async () => {
         <th>Amount</th>
         </thead>
         <tbody>
-        <tr v-for="(amount, clientId) in sales.clients">
-            <td>{{ clients[clientId].first_name }}  {{ clients[clientId].last_name }}</td>
-            <td>{{ amount }}</td>
+        <tr v-for="client_sales in sales.clients">
+            <td>{{ clients[client_sales.client_id].first_name }}  {{ clients[client_sales.client_id].last_name }}</td>
+            <td>{{ client_sales.total_amount }}</td>
         </tr>
         <tr>
             <td>Total</td>

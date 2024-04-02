@@ -9,11 +9,11 @@ onMounted(() => {
     new Chart(chart.value, {
         type: 'bar',
         data: {
-            labels: Object.keys(props.clients),
+            labels: props.clients.map(client => client.date),
             datasets: [
                 {
                     label: 'Clients registered by date',
-                    data: Object.values(props.clients),
+                    data: props.clients.map(client => client.count)
                 },
             ],
         }

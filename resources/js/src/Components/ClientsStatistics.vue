@@ -18,9 +18,9 @@ onMounted(async () => {
         <th>New Clients</th>
         </thead>
         <tbody>
-        <tr v-for="(registered, date) in clients">
-            <td>{{ date }} </td>
-            <td>{{ registered }}</td>
+        <tr v-for="client in clients">
+            <td>{{ client.date }} </td>
+            <td>{{ client.count }}</td>
         </tr>
         </tbody>
     </table>
