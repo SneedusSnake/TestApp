@@ -10,6 +10,7 @@ use App\Models\Client;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Routing\Controller;
 
 class ClientController extends Controller
@@ -19,18 +20,16 @@ class ClientController extends Controller
 
     }
 
-    public function list(Request $request): JsonResponse
+    public function list(Request $request): ResourceCollection
     {
         $clients = Client::query()
             ->when($request->input('ids'), function (Builder $query) use ($request) {
                 $query->whereIn('id', $request->input('ids'));
             })
-            ->with('emails')
+            ->with(['emails', 'websites', 'country'])
             ->paginate(config('pagination.records_per_page'));
 
-        return response()->json(
-            ['data' => ClientResource::collection($clients)],
-        );
+        return ClientResource::collection($clients);
     }
 
     public function create(CreateClientRequest $request): JsonResponse

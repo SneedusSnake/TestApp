@@ -1,10 +1,14 @@
-export async function fetchClients(ids = []) {
+export async function fetchClients(filters) {
     let url = 'http://localhost/api/clients'
-    if (ids) {
-        url += '?' + new URLSearchParams(ids.map(id => ['ids[]', id]))
-    }
-    const response = await fetch(url)
-    const json = await response.json()
+    if (filters) {
+        if (filters.ids) {
+            url += '?' + new URLSearchParams(filters.ids.map(id => ['ids[]', id]))
+        } else {
+            url += '?' + new URLSearchParams(filters)
+        }
+   }
 
-    return json.data
+    const response = await fetch(url)
+
+    return await response.json()
 }
