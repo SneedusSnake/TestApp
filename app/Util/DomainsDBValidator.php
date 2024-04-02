@@ -4,6 +4,7 @@ namespace App\Util;
 
 use App\Exceptions\DomainsDBRemoteServiceException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Uri;
 
@@ -44,6 +45,8 @@ class DomainsDBValidator implements DomainValidator
                 'v1/domains/search',
                 ['query' => ['domain' => $domain]]
             );
+        } catch (ClientException $e) {
+            return $domains;
         } catch (GuzzleException $e) {
             throw new DomainsDBRemoteServiceException(
                 'Error occurred during request to domainsdb api',

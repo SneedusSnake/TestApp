@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\StatisticsController;
+use App\Http\Resources\CountryResource;
 use App\Http\Resources\SaleResource;
+use App\Models\Country;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,11 +23,14 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('clients')->group(function () {
     Route::get('/', [ClientController::class, 'list']);
 
-    Route::post('/', [ClientController::class, 'create']);
+    Route::post('', [ClientController::class, 'create']);
 });
 
-Route::get('/sales/', function (Request $request) {
+Route::get('/sales', function (Request $request) {
    return response()->json(['data' => SaleResource::collection(Sale::query()->paginate(5))]);
+});
+Route::get('/countries', function (Request $request) {
+    return CountryResource::collection(Country::all());
 });
 
 Route::prefix('statistics')->group(function () {

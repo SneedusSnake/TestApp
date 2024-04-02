@@ -36,6 +36,11 @@
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <li class="page-item">
+                <button @click="onClickPage(1)" :class="{ disabled: current_page === 1 }" class="page-link" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </button>
+            </li>
+            <li class="page-item">
                 <button @click="onClickPage(current_page - 1)" :class="{ disabled: current_page === 1 }" class="page-link" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </button>
@@ -43,6 +48,11 @@
             <li v-for="page in pages"  class="page-item"><button @click="onClickPage(page)" :class="{disabled: current_page === page }" class="page-link">{{ page }}</button></li>
             <li class="page-item">
                 <button @click="onClickPage(current_page + 1)" :class="{ disabled: current_page === total_pages }" class="page-link" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </button>
+            </li>
+            <li class="page-item">
+                <button @click="onClickPage(total_pages)" :class="{ disabled: current_page === total_pages }" class="page-link" aria-label="Last">
                     <span aria-hidden="true">&raquo;</span>
                 </button>
             </li>

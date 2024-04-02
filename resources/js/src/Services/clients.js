@@ -12,3 +12,16 @@ export async function fetchClients(filters) {
 
     return await response.json()
 }
+
+export async function createClient(client) {
+    const response = await fetch('http://localhost/api/clients', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': 'application/json'
+        },
+        body: JSON.stringify(client)
+    })
+
+    return await response.json()
+}

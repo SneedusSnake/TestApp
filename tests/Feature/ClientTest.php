@@ -91,7 +91,7 @@ class ClientTest extends TestCase
             'last_name' => $data['last_name'],
             'country_id' => $data['country_id'],
         ]);
-        $response->assertStatus(200)->assertJsonFragment($data);
+        $response->assertStatus(201)->assertJsonFragment($data);
     }
 
     public function test_clients_resource_creates_client_emails(): void

@@ -31,7 +31,9 @@ class CreateClientRequest extends FormRequest
         return [
             'first_name' => 'required',
             'last_name'  => 'required',
-            'email'      => 'required|unique:client_emails',
+            'email'      => 'required|unique:client_emails|email',
+            'emails'     => 'array',
+            'emails.*'   => 'unique:client_emails,email|email',
             'websites'   => 'required|array',
             'websites.*' => ['unique:client_websites,website', 'url', $this->domainRule],
             'country_id' => 'required|exists:countries,id',

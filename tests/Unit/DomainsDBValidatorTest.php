@@ -96,7 +96,7 @@ class DomainsDBValidatorTest extends TestCase
 
     public function test_throws_exception_on_service_error(): void
     {
-        $this->mockErrorResponse(403);
+        $this->mockErrorResponse(500);
 
         $this->expectException(DomainsDBRemoteServiceException::class);
 

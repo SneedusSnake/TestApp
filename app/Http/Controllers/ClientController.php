@@ -8,7 +8,6 @@ use App\Http\Requests\CreateClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Routing\Controller;
@@ -32,12 +31,12 @@ class ClientController extends Controller
         return ClientResource::collection($clients);
     }
 
-    public function create(CreateClientRequest $request): JsonResponse
+    public function create(CreateClientRequest $request): ClientResource
     {
         $command = CreateClientCommand::fromArray($request->all());
         $client = $this->clientHandler->handle($command);
         $client->loadMissing(['emails', 'websites']);
 
-        return response()->json(['data' => new ClientResource($client)]);
+        return new ClientResource($client);
     }
 }

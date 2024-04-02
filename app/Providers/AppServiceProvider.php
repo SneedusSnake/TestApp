@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Util\DomainsDBValidator;
 use App\Util\DomainValidator;
+use App\Util\FakeDomainValidator;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,8 +33,10 @@ class AppServiceProvider extends ServiceProvider
     public function bindDomainValidator(): void
     {
         $this->app->bind(DomainValidator::class, function () {
+            return new FakeDomainValidator();
             $client = new Client([
-                'base_uri' => config('services.domainsdb.url')
+                'base_uri' => config('services.domainsdb.url'),
+                'redirect.disable' => true,
             ]);
 
             return new DomainsDBValidator($client);
