@@ -21,20 +21,20 @@ async function updateClients() {
     <div class="container">
         <div class="row">
             <div class="col form-floating">
-                <input id="clientsFrom" type="date" class="form-control form-control-sm" placeholder="test" v-model="date_from">
-                <label class="form-label" for="clientsFrom">Date From</label>
+                <input id="clientsFrom" type="date" class="form-control form-control-sm" v-model="date_from">
+                <label class="form-label" for="clientsFrom">{{ $t('statistics.clients.date_from') }}</label>
             </div>
             <div class="col form-floating">
-                <input id="clientsTo" type="date" class="form-control form-control-sm" placeholder="test" v-model="date_to">
-                <label class="form-label" for="clientsTo">Date To</label>
+                <input id="clientsTo" type="date" class="form-control form-control-sm" v-model="date_to">
+                <label class="form-label" for="clientsTo">{{ $t('statistics.clients.date_from') }}</label>
             </div>
         </div>
     </div>
     <ClientsChart v-if="clients" :clients="clients"/>
     <table v-if="clients" class="table table-striped table-bordered table-hover table-sm mt-lg-5">
         <thead>
-        <th>Date</th>
-        <th>New Clients</th>
+        <th>{{ $t('statistics.clients.date_table_header') }}</th>
+        <th>{{ $t('statistics.clients.new_clients_amount_table_header') }}</th>
         </thead>
         <tbody>
         <tr v-for="client in clients">

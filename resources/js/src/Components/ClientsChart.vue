@@ -1,9 +1,11 @@
 <script setup>
 import Chart from "chart.js/auto";
 import {onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps(['clients'])
 const chart = ref(null)
+const { t } = useI18n()
 
 onMounted(() => {
     new Chart(chart.value, {
@@ -12,7 +14,7 @@ onMounted(() => {
             labels: props.clients.map(client => client.date),
             datasets: [
                 {
-                    label: 'Clients registered by date',
+                    label: t('statistics.clients.chart'),
                     data: props.clients.map(client => client.count)
                 },
             ],

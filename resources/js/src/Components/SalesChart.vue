@@ -1,10 +1,12 @@
 <script setup>
 import Chart from "chart.js/auto";
 import {onMounted, ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps(['clients', 'sales', 'rest'])
 
 const chart = ref(null)
+const { t } = useI18n()
 
 const labels = computed(() => [
     ...props.sales.map(client_sale => {
@@ -22,7 +24,7 @@ onMounted(() => {
             labels: labels.value,
             datasets: [
                 {
-                    label: 'Sales by client',
+                    label: t('statistics.sales.chart'),
                     /*
                         Т.к данные сгенерированы рандомно, продажи самых крупных клиентов ничтожно малы
                         по сравнению с суммой продаж всех остальных килентов,

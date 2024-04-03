@@ -20,10 +20,10 @@ async function updateSales(page) {
     <div class="container text-center">
         <table class="table table-striped table-bordered table-sm mt-lg-5 table-hover">
             <thead>
-                <th>Id</th>
-                <th>Amount</th>
-                <th>Client</th>
-                <th>Date</th>
+                <th>{{ $t('sales.id_header') }}</th>
+                <th>{{ $t('sales.amount_header') }}</th>
+                <th>{{ $t('sales.client_header') }}</th>
+                <th>{{ $t('sales.date_header') }}</th>
             </thead>
             <tbody>
                 <tr v-for="sale in sales">

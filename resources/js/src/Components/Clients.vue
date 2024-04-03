@@ -24,17 +24,17 @@
     <div class="container text-center">
         <div class="row">
             <div class="col">
-                <button @click="formOpened = !formOpened" class="btn btn-primary">Add client</button>
+                <button @click="formOpened = !formOpened" class="btn btn-primary">{{ $t('clients.toggle_creation_form') }}</button>
             </div>
         </div>
         <ClientForm v-if="formOpened" @clientCreated="updateClients(meta.current_page)"/>
         <table class="table table-striped table-bordered table-sm mt-lg-5 table-hover">
             <thead>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Country</th>
-            <th>Email</th>
-            <th>Website</th>
+            <th>{{ $t('clients.first_name_header') }}</th>
+            <th>{{ $t('clients.last_name_header') }}</th>
+            <th>{{ $t('clients.country_header') }}</th>
+            <th>{{ $t('clients.email_header') }}</th>
+            <th>{{ $t('clients.website_header') }}</th>
             </thead>
             <tbody v-if="clients">
             <tr v-for="client in clients">

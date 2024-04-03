@@ -1,0 +1,48 @@
+{
+    "menu": {
+        "statistics": "Statistics",
+        "clients": "Clients",
+        "sales": "Sales"
+    },
+    "statistics": {
+        "sales": {
+            "date_from": "From",
+            "date_to": "To",
+            "table_header_client": "Client",
+            "table_header_amount": "Amount",
+            "total": "Total",
+            "chart": "Sales by client"
+        },
+        "clients": {
+            "date_from": "From",
+            "date_to": "To",
+            "date_table_header": "Date",
+            "new_clients_amount_table_header": "Registered",
+            "chart": "New Clients Per Day"
+        }
+    },
+    "clients": {
+        "toggle_creation_form": "Create Client",
+        "first_name_header": "First name",
+        "last_name_header": "Last name",
+        "country_header": "Country",
+        "email_header": "Email",
+        "website_header": "Website",
+        "form": {
+            "first_name": "First name*",
+            "last_name": "Last name*",
+            "email": "Email",
+            "website": "Website",
+            "additional_email": "Additional email",
+            "additional_website": "Additional website",
+            "country_selection": "Select a Country",
+            "submit": "Save"
+        }
+    },
+    "sales": {
+        "id_header": "Id",
+        "amount_header": "Amount",
+        "client_header": "Client",
+        "date_header": "Date"
+    }
+}

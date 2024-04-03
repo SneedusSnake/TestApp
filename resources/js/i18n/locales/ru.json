@@ -1,0 +1,48 @@
+{
+    "menu": {
+        "statistics": "Статистика",
+        "clients": "Клиенты",
+        "sales": "Продажи"
+    },
+    "statistics": {
+        "sales": {
+            "date_from": "С",
+            "date_to": "По",
+            "table_header_client": "Клиент",
+            "table_header_amount": "Продажи",
+            "total": "Всего",
+            "chart": "Продажи клиентов"
+        },
+        "clients": {
+            "date_from": "С",
+            "date_to": "По",
+            "date_table_header": "Дата",
+            "new_clients_amount_table_header": "Регистраци",
+            "chart": "Регистраций в день"
+        }
+    },
+    "clients": {
+        "toggle_creation_form": "Создать Клиента",
+        "first_name_header": "Имя",
+        "last_name_header": "Фамилия",
+        "country_header": "Страна",
+        "email_header": "Email",
+        "website_header": "Сайт",
+        "form": {
+            "first_name": "Имя*",
+            "last_name": "Фамилия*",
+            "email": "Email*",
+            "website": "Сайт*",
+            "additional_email": "Дополнительный Email",
+            "additional_website": "Дополнительынй Сайт",
+            "country_selection": "Выберите страну",
+            "submit": "Сохранить"
+        }
+    },
+    "sales": {
+        "id_header": "Id",
+        "amount_header": "Сумма",
+        "client_header": "Клиент",
+        "date_header": "Дата"
+    }
+}

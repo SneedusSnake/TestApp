@@ -9,13 +9,13 @@ defineProps(['active_tab'])
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" :class="{ active: ['/', '/statistics'].includes(active_tab) }" aria-current="page" href="#/statistics">Statistics</a>
+                        <a class="nav-link" :class="{ active: ['/', '/statistics'].includes(active_tab) }" aria-current="page" href="#/statistics">{{ $t('menu.statistics') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" :class="{ active: active_tab == '/clients' }" href="#/clients">Clients</a>
+                        <a class="nav-link" :class="{ active: active_tab == '/clients' }" href="#/clients">{{ $t('menu.clients')}}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" :class="{ active: active_tab == '/sales' }" href="#/sales">Sales</a>
+                        <a class="nav-link" :class="{ active: active_tab == '/sales' }" href="#/sales">{{ $t('menu.sales') }}</a>
                     </li>
                 </ul>
             </div>

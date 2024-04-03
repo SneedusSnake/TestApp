@@ -38,20 +38,20 @@ async function updateSales() {
     <div class="container">
         <div class="row">
             <div class="col form-floating">
-                <input id="salesFrom" type="date" class="form-control form-control-sm" placeholder="test" v-model="date_from">
-                <label class="form-label" for="salesFrom">Date From</label>
+                <input id="salesFrom" type="date" class="form-control form-control-sm"  v-model="date_from">
+                <label class="form-label" for="salesFrom">{{ $t('statistics.sales.date_from') }}</label>
             </div>
             <div class="col form-floating">
-                <input id="salesTo" type="date" class="form-control form-control-sm" placeholder="test" v-model="date_to">
-                <label class="form-label" for="salesTo">Date To</label>
+                <input id="salesTo" type="date" class="form-control form-control-sm" v-model="date_to">
+                <label class="form-label" for="salesTo">{{ $t('statistics.sales.date_to') }}</label>
             </div>
         </div>
     </div>
     <SalesChart v-if="clients" :clients="clients" :sales="sales.clients" :rest="rest"/>
     <table class="table table-striped table-bordered table-hover table-sm mt-lg-5">
         <thead>
-        <th>Client</th>
-        <th>Amount</th>
+        <th>{{ $t('statistics.sales.table_header_client') }}</th>
+        <th>{{ $t('statistics.sales.table_header_amount') }}</th>
         </thead>
         <tbody v-if="clients" >
         <tr v-for="client_sales in sales.clients">
@@ -59,7 +59,7 @@ async function updateSales() {
             <td>{{ client_sales.total_amount }}</td>
         </tr>
         <tr>
-            <td>Total</td>
+            <td><b>{{ $t('statistics.sales.total') }}</b></td>
             <td>{{ rest }}</td>
         </tr>
         </tbody>
