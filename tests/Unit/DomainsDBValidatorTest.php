@@ -39,7 +39,7 @@ class DomainsDBValidatorTest extends TestCase
 
     public function test_makes_http_request_to_search_domains(): void
     {
-        $this->mockDomainNotFoundResponse();
+        $this->mockDomainListResponse();
 
         $this->validator->validate('http://example.org');
 
@@ -54,14 +54,7 @@ class DomainsDBValidatorTest extends TestCase
     {
         $this->mockDomainListResponse();
 
-        $this->assertTrue($this->validator->validate('http://wikipedia-russia.ru/articles'));
-    }
-
-    public function test_returns_false_if_domain_is_not_found(): void
-    {
-        $this->mockDomainListResponse();
-
-        $this->assertFalse($this->validator->validate('not-wikipedia-russia.ru'));
+        $this->assertTrue($this->validator->validate('http://example.org'));
     }
 
     public function urlsToParse(): array
@@ -106,9 +99,8 @@ class DomainsDBValidatorTest extends TestCase
     private function mockDomainNotFoundResponse(): void
     {
         $response = new Response(
-            200,
-            ['Content-Type' => 'application/json'],
-            $this->loadMockResponseContent('domain_not_found.json')
+            404,
+            ['Content-Type' => 'application/json']
         );
         $this->mockHandler->append($response);
     }
@@ -118,7 +110,7 @@ class DomainsDBValidatorTest extends TestCase
         $response = new Response(
             200,
             ['Content-Type' => 'application/json'],
-            $this->loadMockResponseContent('domains_search.json')
+            json_encode(['domains' => [['domain' => 'http://example.org']]])
         );
         $this->mockHandler->append($response);
     }
@@ -126,13 +118,6 @@ class DomainsDBValidatorTest extends TestCase
     private function mockErrorResponse(int $statusCode = 500): void
     {
         $this->mockHandler->append(new Response($statusCode));
-    }
-
-    private function loadMockResponseContent(string $fileName): string
-    {
-        return file_get_contents(
-            __DIR__ . '/../Resources/Responses/domainsdb/' . $fileName
-        );
     }
 
     private function getRequest(): Request

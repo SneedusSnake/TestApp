@@ -27,7 +27,7 @@ Route::prefix('clients')->group(function () {
 });
 
 Route::get('/sales', function (Request $request) {
-   return response()->json(['data' => SaleResource::collection(Sale::query()->paginate(5))]);
+    return SaleResource::collection(Sale::query()->with('client')->paginate(config('pagination.records_per_page')));
 });
 Route::get('/countries', function (Request $request) {
     return CountryResource::collection(Country::all());

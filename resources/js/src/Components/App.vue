@@ -3,12 +3,14 @@ import { ref, computed } from 'vue'
 import Statistics from "./Statistics.vue"
 import Clients from "./Clients.vue";
 import Menu from "./Menu.vue";
+import Sales from "./Sales.vue";
 const count = ref(0)
 
 const routes = {
     '/': Statistics,
     '/statistics': Statistics,
-    '/clients': Clients
+    '/clients': Clients,
+    '/sales': Sales,
 }
 
 const currentPath = ref(window.location.hash)

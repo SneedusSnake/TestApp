@@ -14,6 +14,9 @@ defineProps(['active_tab'])
                     <li class="nav-item">
                         <a class="nav-link" :class="{ active: active_tab == '/clients' }" href="#/clients">Clients</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" :class="{ active: active_tab == '/sales' }" href="#/sales">Sales</a>
+                    </li>
                 </ul>
             </div>
         </div>

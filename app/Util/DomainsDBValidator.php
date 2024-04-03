@@ -22,7 +22,7 @@ class DomainsDBValidator implements DomainValidator
     {
         $domain = $this->parseDomain($url);
 
-        return in_array($domain, $this->searchDomain($domain));
+        return !empty($this->searchDomain($domain));
     }
 
     private function parseDomain(string $url): string
@@ -45,6 +45,7 @@ class DomainsDBValidator implements DomainValidator
                 'v1/domains/search',
                 ['query' => ['domain' => $domain]]
             );
+            $data = json_decode($response->getBody()->getContents(), true);
         } catch (ClientException $e) {
             return $domains;
         } catch (GuzzleException $e) {
@@ -54,8 +55,6 @@ class DomainsDBValidator implements DomainValidator
                 $e
             );
         }
-
-        $data = json_decode($response->getBody()->getContents(), true);
 
         if (!empty($data['domains'])) {
             $domains = array_map(function ($domainData) {

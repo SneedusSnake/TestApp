@@ -33,7 +33,6 @@ class AppServiceProvider extends ServiceProvider
     public function bindDomainValidator(): void
     {
         $this->app->bind(DomainValidator::class, function () {
-            return new FakeDomainValidator();
             $client = new Client([
                 'base_uri' => config('services.domainsdb.url'),
                 'redirect.disable' => true,
